@@ -6,6 +6,7 @@ class SendMessagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final titleController = TextEditingController();
     final messageController = TextEditingController();
 
     return Scaffold(
@@ -27,15 +28,27 @@ class SendMessagePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildTextField(
+              'Title',
+              [],
+              controller: titleController,
+            ),
+            const SizedBox(height: 16),
+            _buildTextField(
               'Message',
               [],
+              maxLines: 3,
               controller: messageController,
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                if (messageController.text.isNotEmpty) {
-                  _sendMessage(context, messageController.text);
+                if (titleController.text.isNotEmpty &&
+                    messageController.text.isNotEmpty) {
+                  _sendMessage(
+                    context,
+                    titleController.text,
+                    messageController.text,
+                  );
                   // make a delay of 3 seconds
                   Future.delayed(const Duration(seconds: 2), () {
                     Navigator.pop(context);
@@ -43,7 +56,7 @@ class SendMessagePage extends StatelessWidget {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Please fill the message field'),
+                      content: Text('Please fill all the fields'),
                       duration: Duration(seconds: 2),
                     ),
                   );
@@ -74,12 +87,13 @@ class SendMessagePage extends StatelessWidget {
     String labelText,
     List<TextInputFormatter>? inputFormatters, {
     required TextEditingController controller,
+    int? maxLines,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextField(
         inputFormatters: inputFormatters,
-        maxLines: 3,
+        maxLines: maxLines,
         decoration: InputDecoration(
           labelText: labelText,
           border: const OutlineInputBorder(),
@@ -89,8 +103,8 @@ class SendMessagePage extends StatelessWidget {
     );
   }
 
-  void _sendMessage(BuildContext context, String message) {
-    // TODO: Implement logic to send a message to all users' emails
+  void _sendMessage(BuildContext context, String title, String message) {
+    // TODO: Implement logic to send a message to all users' emails with the provided title and message
     // You may use a messaging service or send emails, depending on your requirements.
 
     _showSnackBar(context, 'Message sent successfully!');
