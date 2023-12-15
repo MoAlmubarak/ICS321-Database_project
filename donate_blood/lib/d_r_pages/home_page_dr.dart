@@ -2,6 +2,7 @@ import 'package:donate_blood/admin_pages/homePages/approve_blood_request.dart';
 import 'package:donate_blood/admin_pages/homePages/blood_collection.dart';
 import 'package:donate_blood/admin_pages/homePages/report_page.dart';
 import 'package:donate_blood/admin_pages/homePages/sending_emails_page.dart';
+import 'package:donate_blood/d_r_pages/do_request_blood_dr.dart';
 import 'package:donate_blood/d_r_pages/request_page_dr.dart';
 import 'package:donate_blood/d_r_pages/search_for_history_dr.dart';
 import 'package:donate_blood/d_r_pages/user_page_dr.dart';
@@ -36,7 +37,20 @@ class HomePageDR extends StatelessWidget {
                 children: [
                   const SizedBox(height: 90),
                   _buildButton(
-                    ' Search for my history', // Display button with specific label and color
+                    'New Blood Request', // Display button with specific label and color
+                    buttonColor: const Color.fromRGBO(255, 88, 88, 1.0),
+                    onPressed: () {
+                      // Navigate to the AddDRPage
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RequestBloodPageDR(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildButton(
+                    'My History', // Display button with specific label and color
                     buttonColor: const Color.fromRGBO(255, 88, 88, 1.0),
                     onPressed: () {
                       // Navigate to the AddDRPage
@@ -49,7 +63,7 @@ class HomePageDR extends StatelessWidget {
                     },
                   ),
                   _buildButton(
-                    'Agree for blood request', // Display button with specific label and color
+                    'Blood Requests', // Display button with specific label and color
                     buttonColor: const Color.fromRGBO(255, 88, 88, 1.0),
                     onPressed: () {
                       // Navigate to the AddDRPage

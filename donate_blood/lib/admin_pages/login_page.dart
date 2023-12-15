@@ -1,3 +1,4 @@
+import 'package:donate_blood/d_r_pages/home_screen_dr.dart';
 import 'package:flutter/material.dart';
 import 'package:donate_blood/admin_pages/homePages/home_screen.dart'; // Import the HomeScreen class or update the import statement accordingly
 
@@ -129,14 +130,48 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Widget _buildLoginButton() {
+  //   return ElevatedButton(
+  //     onPressed: () {
+  //       // Navigate to the HomeScreen when the login button is pressed
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => HomeScreen()),
+  //       );
+  //     },
+  //     style: ElevatedButton.styleFrom(
+  //       shape: const StadiumBorder(),
+  //       elevation: 20,
+  //       backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
+  //       minimumSize: const Size.fromHeight(60),
+  //     ),
+  //     child: const Text('LOGIN',
+  //         style: TextStyle(
+  //             fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
+  //   );
+  // }
   Widget _buildLoginButton() {
     return ElevatedButton(
       onPressed: () {
-        // Navigate to the HomeScreen when the login button is pressed
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
+        String username = usernameController.text.toLowerCase();
+
+        if (username.contains('admin')) {
+          // Navigate to HomeScreen for admin
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        } else if (username.contains('donor') ||
+            username.contains('recipient')) {
+          // Navigate to HomeScreenDR for donor/recipient
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreenDR()),
+          );
+        } else {
+          // Handle other cases or display a message
+          _showSnackBar(context, 'Invalid username');
+        }
       },
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),
@@ -144,9 +179,23 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
         minimumSize: const Size.fromHeight(60),
       ),
-      child: const Text('LOGIN',
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
+      child: const Text(
+        'LOGIN',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2),
+      ),
     );
   }
 

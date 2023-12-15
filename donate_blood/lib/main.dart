@@ -19,10 +19,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      // home: const LoginPage(),
+      home: const LoginPage(),
       // home: const HomeScreen(),
       // home: const AddDRPage(),
-      home: const HomeScreenDR(),
+      // home: const HomeScreenDR(),
       debugShowCheckedModeBanner: false,
     );
   }
