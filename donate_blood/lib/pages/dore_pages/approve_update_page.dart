@@ -1,35 +1,26 @@
-import 'package:donate_blood/pages/homePages/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-class RequestApprovalPage extends StatelessWidget {
+class RequestApprovalPage extends StatefulWidget {
   const RequestApprovalPage({Key? key});
 
   @override
+  _RequestApprovalPageState createState() => _RequestApprovalPageState();
+}
+
+class _RequestApprovalPageState extends State<RequestApprovalPage> {
+  // List to store selected requests
+  List<bool> selectedRequests = List.generate(5, (index) => false);
+
+  @override
   Widget build(BuildContext context) {
-    // Dummy data for Donor/Recipient information
-    const donorRecipientInfo = {
-      'id': '123456',
-      'firstName': 'John',
-      'lastName': 'Doe',
-    };
-
-    // Dummy data for donation and received blood information
-    const donationInfo = {
-      'donationCount': 5,
-      'donationAmount': '500 ml',
-      'receivedBloodCount': 3,
-      'receivedBloodAmount': '300 ml',
-    };
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
-        title: const Text('Donor/Recipient History'),
+        title: const Text('Request Approval'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_sharp),
           onPressed: () {
-            // Navigate to the previous page (DRPage)
+            // Navigate to the previous page
             Navigator.pop(context);
           },
         ),
@@ -40,18 +31,55 @@ class RequestApprovalPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildInfoWidget('Donor/Recipient Info', donorRecipientInfo),
-            _buildInfoWidget('Donation and Received Blood Info', donationInfo),
+            const SizedBox(height: 20),
+            _buildRequestList(),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Navigate to the HomeScreen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomeScreen(),
-                  ),
-                );
+                // Implement logic for approving selected requests
+                _processRequests(approve: true);
+              },
+              style: ElevatedButton.styleFrom(
+                shape: const StadiumBorder(),
+                elevation: 20,
+                backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
+                minimumSize: const Size.fromHeight(60),
+              ),
+              child: const Text(
+                'Approve',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                // Implement logic for declining selected requests
+                _processRequests(approve: false);
+              },
+              style: ElevatedButton.styleFrom(
+                shape: const StadiumBorder(),
+                elevation: 20,
+                backgroundColor: Colors.red,
+                minimumSize: const Size.fromHeight(60),
+              ),
+              child: const Text(
+                'Decline',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to the previous page
+                Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
                 shape: const StadiumBorder(),
@@ -74,39 +102,55 @@ class RequestApprovalPage extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoWidget(String title, Map<String, dynamic> info) {
+  Widget _buildRequestList() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: const TextStyle(
+        const Text(
+          'Select Requests:',
+          style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: Color.fromRGBO(255, 88, 88, 1.0),
           ),
         ),
         const SizedBox(height: 8),
-        ...info.entries.map((entry) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '${entry.key}:',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                Text(
-                  entry.value.toString(),
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ],
-            ),
-          );
-        }),
+        // Use ListView.builder to create a list of CheckboxListTile
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: selectedRequests.length,
+          itemBuilder: (context, index) {
+            return CheckboxListTile(
+              title: Text('Request ${index + 1}'),
+              value: selectedRequests[index],
+              onChanged: (value) {
+                setState(() {
+                  selectedRequests[index] = value!;
+                });
+              },
+            );
+          },
+        ),
         const SizedBox(height: 16),
       ],
     );
+  }
+
+  void _processRequests({required bool approve}) {
+    // Implement logic for approving or declining selected requests
+    List<int> selectedIndices = [];
+    for (int i = 0; i < selectedRequests.length; i++) {
+      if (selectedRequests[i]) {
+        selectedIndices.add(i);
+      }
+    }
+
+    // Remove the selected requests from the list
+    for (int i in selectedIndices.reversed) {
+      selectedRequests.removeAt(i);
+    }
+
+    // Clear the selectedRequests list
+    selectedRequests = List.generate(5, (index) => false);
   }
 }
