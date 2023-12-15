@@ -1,4 +1,5 @@
 import 'package:donate_blood/pages/homePages/blood_collection.dart';
+import 'package:donate_blood/pages/homePages/sending_emails_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -79,8 +80,7 @@ class HomePage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              const BloodCollectionDrivePage(),
+                          builder: (context) => const SendMessagePage(),
                         ),
                       );
                     },
