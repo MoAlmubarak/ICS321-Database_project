@@ -1,10 +1,9 @@
-import 'package:donate_blood/pages/dore_pages/edit_d_r_page.dart';
-import 'package:donate_blood/pages/dore_pages/search_history_d_r_page2.dart';
+import 'package:donate_blood/admin_pages/dore_pages/edit_d_r_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class IdSearchHistoryPage extends StatelessWidget {
-  const IdSearchHistoryPage({Key? key});
+class IdRemovePage extends StatelessWidget {
+  const IdRemovePage({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +12,7 @@ class IdSearchHistoryPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
-        title: const Text('Search Donor/Recipient History'),
+        title: const Text('Edit Donor/Recipient info'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_sharp),
           onPressed: () {
@@ -38,7 +37,7 @@ class IdSearchHistoryPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const SearchHistoryPage(),
+                      builder: (context) => const EditDRPage(),
                     ),
                   );
                 } else {
@@ -57,7 +56,7 @@ class IdSearchHistoryPage extends StatelessWidget {
                 minimumSize: const Size.fromHeight(60),
               ),
               child: const Text(
-                'Search',
+                'Next',
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,

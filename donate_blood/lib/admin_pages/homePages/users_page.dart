@@ -1,6 +1,6 @@
-import 'package:donate_blood/pages/dore_pages/search_history_d_r_page2.dart';
-import 'package:donate_blood/pages/homePages/home_screen.dart';
-import 'package:donate_blood/pages/users_pages/add_user_page.dart';
+import 'package:donate_blood/admin_pages/dore_pages/search_history_d_r_page2.dart';
+import 'package:donate_blood/admin_pages/homePages/home_screen.dart';
+import 'package:donate_blood/admin_pages/users_pages/add_user_page.dart';
 import 'package:flutter/material.dart';
 
 class UsersPage extends StatelessWidget {

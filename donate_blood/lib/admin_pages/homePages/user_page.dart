@@ -1,11 +1,11 @@
-import 'package:donate_blood/pages/dore_pages/adding_d_r_page.dart';
-import 'package:donate_blood/pages/dore_pages/edit_d_r_page.dart';
-import 'package:donate_blood/pages/dore_pages/id_to_update.dart';
-import 'package:donate_blood/pages/dore_pages/removing_d_R_page.dart';
-import 'package:donate_blood/pages/dore_pages/search_history_d_r_page.dart';
-import 'package:donate_blood/pages/users_pages/add_user_page.dart';
-import 'package:donate_blood/pages/users_pages/edit_user_page.dart';
-import 'package:donate_blood/pages/users_pages/remove_user_page.dart';
+import 'package:donate_blood/admin_pages/dore_pages/adding_d_r_page.dart';
+import 'package:donate_blood/admin_pages/dore_pages/edit_d_r_page.dart';
+import 'package:donate_blood/admin_pages/dore_pages/id_to_update.dart';
+import 'package:donate_blood/admin_pages/dore_pages/removing_d_R_page.dart';
+import 'package:donate_blood/admin_pages/dore_pages/search_history_d_r_page.dart';
+import 'package:donate_blood/admin_pages/users_pages/add_user_page.dart';
+import 'package:donate_blood/admin_pages/users_pages/edit_user_page.dart';
+import 'package:donate_blood/admin_pages/users_pages/remove_user_page.dart';
 import 'package:flutter/material.dart';
 // import 'package:your_app_name_here/pages/add_dr_page.dart'; // Make sure to import the correct file
 
