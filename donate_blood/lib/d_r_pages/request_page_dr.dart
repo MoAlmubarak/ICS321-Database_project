@@ -25,8 +25,13 @@ class _RequestPageDRState extends State<RequestPageDR> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_sharp),
           onPressed: () {
-            // Navigate to the previous page
-            Navigator.pop(context);
+            // Navigate to the AddDRPage
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomeScreenDR(),
+              ),
+            );
           },
         ),
       ),

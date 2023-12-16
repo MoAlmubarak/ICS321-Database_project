@@ -1,3 +1,4 @@
+import 'package:donate_blood/d_r_pages/home_screen_dr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -19,8 +20,13 @@ class RequestBloodPageDR extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_sharp),
           onPressed: () {
-            // Navigate to the previous page
-            Navigator.pop(context);
+            // Navigate to the AddDRPage
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomeScreenDR(),
+              ),
+            );
           },
         ),
       ),
