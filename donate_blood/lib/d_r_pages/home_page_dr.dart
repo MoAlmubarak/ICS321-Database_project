@@ -1,11 +1,15 @@
-import 'package:donate_blood/pages/homePages/approve_blood_request.dart';
-import 'package:donate_blood/pages/homePages/blood_collection.dart';
-import 'package:donate_blood/pages/homePages/report_page.dart';
-import 'package:donate_blood/pages/homePages/sending_emails_page.dart';
+import 'package:donate_blood/admin_pages/homePages/approve_blood_request.dart';
+import 'package:donate_blood/admin_pages/homePages/blood_collection.dart';
+import 'package:donate_blood/admin_pages/homePages/report_page.dart';
+import 'package:donate_blood/admin_pages/homePages/sending_emails_page.dart';
+import 'package:donate_blood/d_r_pages/do_request_blood_dr.dart';
+import 'package:donate_blood/d_r_pages/request_page_dr.dart';
+import 'package:donate_blood/d_r_pages/search_for_history_dr.dart';
+import 'package:donate_blood/d_r_pages/user_page_dr.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomePageDR extends StatelessWidget {
+  const HomePageDR({Key? key}) : super(key: key);
 
   @override
   @override
@@ -33,54 +37,53 @@ class HomePage extends StatelessWidget {
                 children: [
                   const SizedBox(height: 90),
                   _buildButton(
-                    'Approve Blood Request', // Display button with specific label and color
+                    'New Blood Request', // Display button with specific label and color
                     buttonColor: const Color.fromRGBO(255, 88, 88, 1.0),
                     onPressed: () {
                       // Navigate to the AddDRPage
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const BloodRequestsPage(),
+                          builder: (context) => RequestBloodPageDR(),
                         ),
                       );
                     },
                   ),
                   _buildButton(
-                    'Blood Collection', // Display button with specific label and color
+                    'My History', // Display button with specific label and color
                     buttonColor: const Color.fromRGBO(255, 88, 88, 1.0),
                     onPressed: () {
                       // Navigate to the AddDRPage
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              const BloodCollectionDrivePage(),
+                          builder: (context) => const SearchHistoryPageDR(),
                         ),
                       );
                     },
                   ),
                   _buildButton(
-                    'Generate Reports', // Display button with specific label and color
+                    'Blood Requests', // Display button with specific label and color
                     buttonColor: const Color.fromRGBO(255, 88, 88, 1.0),
                     onPressed: () {
                       // Navigate to the AddDRPage
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ReportDashboardPage(),
+                          builder: (context) => const RequestPageDR(),
                         ),
                       );
                     },
                   ),
                   _buildButton(
-                    'Send Email', // Display button with specific label and color
+                    'Update Information', // Display button with specific label and color
                     buttonColor: const Color.fromRGBO(255, 88, 88, 1.0),
                     onPressed: () {
                       // Navigate to the AddDRPage
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const SendMessagePage(),
+                          builder: (context) => const UserPageDR(),
                         ),
                       );
                     },

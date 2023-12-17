@@ -1,15 +1,13 @@
-import 'package:donate_blood/pages/dore_pages/adding_d_r_page.dart';
-import 'package:donate_blood/pages/dore_pages/approve_update_page.dart';
-import 'package:donate_blood/pages/dore_pages/edit_d_r_page.dart';
-import 'package:donate_blood/pages/dore_pages/id_to_update.dart';
-import 'package:donate_blood/pages/dore_pages/removing_d_R_page.dart';
-import 'package:donate_blood/pages/dore_pages/search_history_d_r_page.dart';
+import 'package:donate_blood/admin_pages/homePages/approve_blood_request.dart';
+import 'package:donate_blood/admin_pages/homePages/blood_collection.dart';
+import 'package:donate_blood/admin_pages/homePages/report_page.dart';
+import 'package:donate_blood/admin_pages/homePages/sending_emails_page.dart';
 import 'package:flutter/material.dart';
-// import 'package:your_app_name_here/pages/add_dr_page.dart'; // Make sure to import the correct file
 
-class DRPage extends StatelessWidget {
-  const DRPage({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
+  @override
   @override
   Widget build(BuildContext context) {
     // Updated background color to a red shade
@@ -33,68 +31,56 @@ class DRPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 180),
+                  const SizedBox(height: 90),
                   _buildButton(
-                    'Add D/R', // Display button with specific label and color
+                    'Approve Blood Request', // Display button with specific label and color
                     buttonColor: const Color.fromRGBO(255, 88, 88, 1.0),
                     onPressed: () {
                       // Navigate to the AddDRPage
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const AddDRPage(),
+                          builder: (context) => const BloodRequestsPage(),
                         ),
                       );
                     },
                   ),
                   _buildButton(
-                    'Remove D/R', // Display button with specific label and color
+                    'Blood Collection', // Display button with specific label and color
                     buttonColor: const Color.fromRGBO(255, 88, 88, 1.0),
                     onPressed: () {
                       // Navigate to the AddDRPage
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const RemoveDRPage(),
+                          builder: (context) =>
+                              const BloodCollectionDrivePage(),
                         ),
                       );
                     },
                   ),
                   _buildButton(
-                    'Edit D/R', // Display button with specific label and color
+                    'Generate Reports', // Display button with specific label and color
                     buttonColor: const Color.fromRGBO(255, 88, 88, 1.0),
                     onPressed: () {
                       // Navigate to the AddDRPage
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const IdRemovePage(),
+                          builder: (context) => const ReportDashboardPage(),
                         ),
                       );
                     },
                   ),
                   _buildButton(
-                    'Search D/R History', // Display button with specific label and color
+                    'Send Email', // Display button with specific label and color
                     buttonColor: const Color.fromRGBO(255, 88, 88, 1.0),
                     onPressed: () {
                       // Navigate to the AddDRPage
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const IdSearchHistoryPage(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildButton(
-                    'Approve Updates', // Display button with specific label and color
-                    buttonColor: const Color.fromRGBO(255, 88, 88, 1.0),
-                    onPressed: () {
-                      // Navigate to the AddDRPage
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RequestApprovalPage(),
+                          builder: (context) => const SendMessagePage(),
                         ),
                       );
                     },
@@ -138,8 +124,7 @@ class DRPage extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          primary:
-              const Color.fromRGBO(255, 88, 88, 1.0), // Set the button color
+          primary: buttonColor, // Set the button color
           onPrimary: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),

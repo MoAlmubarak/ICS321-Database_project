@@ -1,18 +1,21 @@
-import 'package:donate_blood/pages/homePages/donor_recipient_page.dart';
-import 'package:donate_blood/pages/homePages/home_page.dart';
-import 'package:donate_blood/pages/homePages/user_page.dart';
-import 'package:donate_blood/pages/homePages/users_page.dart';
-import 'package:donate_blood/pages/login_page.dart';
+import 'package:donate_blood/admin_pages/homePages/donor_recipient_page.dart';
+import 'package:donate_blood/admin_pages/homePages/home_page.dart';
+import 'package:donate_blood/admin_pages/homePages/user_page.dart';
+import 'package:donate_blood/admin_pages/homePages/users_page.dart';
+import 'package:donate_blood/admin_pages/login_page.dart';
+import 'package:donate_blood/d_r_pages/home_page_dr.dart';
+import 'package:donate_blood/d_r_pages/request_page_dr.dart';
+import 'package:donate_blood/d_r_pages/user_page_dr.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key});
+class HomeScreenDR extends StatefulWidget {
+  const HomeScreenDR({Key? key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreenDR> createState() => _HomeScreenDRState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenDRState extends State<HomeScreenDR> {
   // Variable to track the index of the selected page in the bottom navigation bar
   int selectedPage = 0;
 
@@ -59,11 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
         BottomNavigationBarItem(
           icon: Icon(Icons.bloodtype_outlined,
               size: 30), // Icon for the 'D/R' page
-          label: 'D/R',
+          label: 'Requests',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person, size: 30), // Icon for the 'Users' page
-          label: 'Users',
+          label: 'Account',
         ),
       ],
       // Current index of the selected page
@@ -90,11 +93,11 @@ class _HomeScreenState extends State<HomeScreen> {
   _getPages() {
     switch (selectedPage) {
       case 0:
-        return const HomePage(); // Display the 'Home' page
+        return const HomePageDR(); // Display the 'Home' page
       case 1:
-        return const DRPage(); // Display the 'D/R' page
+        return const RequestPageDR(); // Display the 'D/R' page
       case 2:
-        return const UserPage(); // Display the 'Users' page
+        return const UserPageDR(); // Display the 'Users' page
     }
   }
 }

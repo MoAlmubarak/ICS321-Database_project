@@ -1,6 +1,7 @@
-import 'package:donate_blood/pages/dore_pages/adding_d_r_page.dart';
-import 'package:donate_blood/pages/homePages/home_screen.dart';
-import 'package:donate_blood/pages/login_page.dart';
+import 'package:donate_blood/admin_pages/dore_pages/adding_d_r_page.dart';
+import 'package:donate_blood/admin_pages/homePages/home_screen.dart';
+import 'package:donate_blood/admin_pages/login_page.dart';
+import 'package:donate_blood/d_r_pages/home_screen_dr.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       home: const LoginPage(),
       // home: const HomeScreen(),
       // home: const AddDRPage(),
+      // home: const HomeScreenDR(),
       debugShowCheckedModeBanner: false,
     );
   }

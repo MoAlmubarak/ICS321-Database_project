@@ -1,9 +1,10 @@
-import 'package:donate_blood/pages/homePages/home_screen.dart';
+import 'package:donate_blood/admin_pages/homePages/home_screen.dart';
+import 'package:donate_blood/d_r_pages/home_screen_dr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class SearchHistoryPage extends StatelessWidget {
-  const SearchHistoryPage({Key? key});
+class SearchHistoryPageDR extends StatelessWidget {
+  const SearchHistoryPageDR({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,7 @@ class SearchHistoryPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const HomeScreen(),
+                    builder: (context) => const HomeScreenDR(),
                   ),
                 );
               },
