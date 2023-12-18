@@ -29,6 +29,20 @@ class HospitalDatabase {
 
   Future<void> _createTables(Database db, int version) async {
     await db.execute('''
+      CREATE TABLE Person (
+        Id INTEGER PRIMARY KEY,
+        Type TEXT NOT NULL,
+        FirstName TEXT NOT NULL,
+        LastName TEXT NOT NULL,
+        Address TEXT NOT NULL,
+        ContactNumber TEXT NOT NULL,
+        Email TEXT NOT NULL,
+        Username TEXT NOT NULL,
+        Password TEXT NOT NULL
+      )
+    ''');
+
+    await db.execute('''
       CREATE TABLE MedicalHistory (
         HistoryId INTEGER PRIMARY KEY,
         MedicalHistory TEXT NOT NULL
@@ -38,19 +52,6 @@ class HospitalDatabase {
       CREATE TABLE BloodType (
         BloodId INTEGER PRIMARY KEY,
         Type TEXT NOT NULL
-      )
-    ''');
-
-    await db.execute('''
-      CREATE TABLE Person (
-        Id INTEGER PRIMARY KEY,
-        FirstName TEXT NOT NULL,
-        LastName TEXT NOT NULL,
-        Address TEXT NOT NULL,
-        ContactNumber TEXT NOT NULL,
-        Email TEXT NOT NULL,
-        Username TEXT NOT NULL,
-        Password TEXT NOT NULL
       )
     ''');
 

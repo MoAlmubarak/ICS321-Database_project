@@ -17,6 +17,11 @@ class DataGetter {
     return await db.query('PatientInfo');
   }
 
+  Future<List<Map<String, dynamic>>> getPersons() async {
+    final db = await instance.database;
+    return await db.query('Person');
+  }
+
   Future<List<Map<String, dynamic>>> getDonors() async {
     final db = await instance.database;
     return await db.query('Donor');
