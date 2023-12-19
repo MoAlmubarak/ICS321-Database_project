@@ -1,22 +1,47 @@
+import 'package:donate_blood/Database/sqlite_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class EditDRPage extends StatelessWidget {
+class EditDRPage extends StatefulWidget {
   const EditDRPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Create controllers for each text field
-    final idController = TextEditingController();
-    final firstNameController = TextEditingController();
-    final lastNameController = TextEditingController();
-    final weightController = TextEditingController();
-    final birthDateController = TextEditingController();
-    final addressController = TextEditingController();
-    final contactNumberController = TextEditingController();
-    final emailController = TextEditingController();
-    final medicalHistoryController = TextEditingController();
+  State<EditDRPage> createState() => _EditDRPageState();
+}
 
+// Create controllers for each text field
+final idController = TextEditingController();
+
+final typeController = TextEditingController();
+
+final firstNameController = TextEditingController();
+
+final lastNameController = TextEditingController();
+
+final weightController = TextEditingController();
+
+final birthDateController = TextEditingController();
+
+final addressController = TextEditingController();
+
+final contactNumberController = TextEditingController();
+
+final emailController = TextEditingController();
+
+final medicalHistoryController = TextEditingController();
+
+final usernameController = TextEditingController();
+
+final passwordController = TextEditingController();
+
+final SQFLiteDatabase database = SQFLiteDatabase();
+
+bool idTextFieldIsInteractive = true;
+bool isVisible = false;
+
+class _EditDRPageState extends State<EditDRPage> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),

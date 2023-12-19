@@ -1,13 +1,22 @@
+// ignore: file_names
+import 'package:donate_blood/Database/sqlite_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class RemoveDRPage extends StatelessWidget {
-  const RemoveDRPage({super.key});
+class RemoveDRPage extends StatefulWidget {
+  RemoveDRPage({super.key});
+
+  @override
+  State<RemoveDRPage> createState() => _RemoveDRPageState();
+}
+
+class _RemoveDRPageState extends State<RemoveDRPage> {
+  final idController = TextEditingController();
+
+  SQFLiteDatabase database = SQFLiteDatabase();
 
   @override
   Widget build(BuildContext context) {
-    final idController = TextEditingController();
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
@@ -30,13 +39,40 @@ class RemoveDRPage extends StatelessWidget {
                 controller: idController),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (idController.text.isNotEmpty) {
-                  _showSnackBar(context);
-                  // make a delay of 3 seconds
-                  Future.delayed(const Duration(seconds: 2), () {
-                    Navigator.pop(context);
-                  });
+                  final persons = await database.getAllPersons();
+                  final donors = await database.getDonors();
+
+                  int selectedPersonId = int.parse(idController.text);
+                  bool donorFound = false;
+
+                  for (final person in persons) {
+                    if (selectedPersonId == person["Id"]) {
+                      for (final donor in donors) {
+                        if (selectedPersonId == donor["DonorId"]) {
+                          donorFound = true;
+                        }
+                      }
+                    }
+                  }
+                  if (donorFound) {
+                    _removeDonorRecipintFromDatabase();
+                    _showUsers();
+                    _showSnackBar(context);
+                    // make a delay of 3 seconds
+                    Future.delayed(const Duration(seconds: 2), () {
+                      Navigator.pop(context);
+                    });
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                            'Donor/recipient is not found. please enter another ID.'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -97,5 +133,42 @@ class RemoveDRPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _removeDonorRecipintFromDatabase() async {
+    int personID = int.parse(idController.text);
+
+    await database.deletePerson(personID);
+    await database.deleteDonor(personID);
+    await database.deleteMedicalHistory(personID);
+  }
+
+  void _showUsers() async {
+    final persons = await database.getAllPersons();
+
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    print('persons:');
+    for (final person in persons) {
+      print(person);
+    }
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+    final donors = await database.getDonors();
+
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    print('donors:');
+    for (final donor in donors) {
+      print(donor);
+    }
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+    final medicalHistorys = await database.getMedicalHistories();
+
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    print('medicalHistorys:');
+    for (final medicalHistory in medicalHistorys) {
+      print(medicalHistory);
+    }
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
   }
 }
