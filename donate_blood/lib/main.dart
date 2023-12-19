@@ -1,10 +1,13 @@
-import 'package:donate_blood/admin_pages/dore_pages/adding_d_r_page.dart';
-import 'package:donate_blood/admin_pages/homePages/home_screen.dart';
 import 'package:donate_blood/admin_pages/login_page.dart';
-import 'package:donate_blood/d_r_pages/home_screen_dr.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+Future main() async {
+// Initialize FFI
+  sqfliteFfiInit();
+
+  databaseFactory = databaseFactoryFfi;
+
   runApp(const MyApp());
 }
 
@@ -15,6 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowMaterialGrid: false,
       title: 'Donate Blood',
       theme: ThemeData(
         primarySwatch: Colors.red,

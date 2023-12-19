@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class RemoveDRPage extends StatelessWidget {
-  const RemoveDRPage({Key? key});
+  const RemoveDRPage({super.key});
 
   @override
   Widget build(BuildContext context) {

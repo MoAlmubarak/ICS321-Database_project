@@ -1,7 +1,3 @@
-import 'package:donate_blood/admin_pages/homePages/donor_recipient_page.dart';
-import 'package:donate_blood/admin_pages/homePages/home_page.dart';
-import 'package:donate_blood/admin_pages/homePages/user_page.dart';
-import 'package:donate_blood/admin_pages/homePages/users_page.dart';
 import 'package:donate_blood/admin_pages/login_page.dart';
 import 'package:donate_blood/d_r_pages/home_page_dr.dart';
 import 'package:donate_blood/d_r_pages/request_page_dr.dart';
@@ -9,7 +5,7 @@ import 'package:donate_blood/d_r_pages/user_page_dr.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreenDR extends StatefulWidget {
-  const HomeScreenDR({Key? key});
+  const HomeScreenDR({super.key});
 
   @override
   State<HomeScreenDR> createState() => _HomeScreenDRState();

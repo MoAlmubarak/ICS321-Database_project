@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class IdRemovePage extends StatelessWidget {
-  const IdRemovePage({Key? key});
+  const IdRemovePage({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,10 +1,9 @@
-import 'package:donate_blood/admin_pages/dore_pages/edit_d_r_page.dart';
 import 'package:donate_blood/admin_pages/dore_pages/search_history_d_r_page2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class IdSearchHistoryPage extends StatelessWidget {
-  const IdSearchHistoryPage({Key? key});
+  const IdSearchHistoryPage({super.key});
 
   @override
   Widget build(BuildContext context) {

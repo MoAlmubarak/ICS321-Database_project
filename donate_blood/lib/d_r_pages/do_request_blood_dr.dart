@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class RequestBloodPageDR extends StatelessWidget {
-  RequestBloodPageDR({superKey, Key? key});
+  RequestBloodPageDR({super.key, superKey});
 
   final TextEditingController recipientIdController = TextEditingController();
   final TextEditingController bloodTypeController = TextEditingController();
@@ -108,8 +108,8 @@ class RequestBloodPageDR extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          primary: buttonColor,
-          onPrimary: Colors.white,
+          foregroundColor: Colors.white,
+          backgroundColor: buttonColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),

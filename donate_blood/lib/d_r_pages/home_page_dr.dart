@@ -1,7 +1,3 @@
-import 'package:donate_blood/admin_pages/homePages/approve_blood_request.dart';
-import 'package:donate_blood/admin_pages/homePages/blood_collection.dart';
-import 'package:donate_blood/admin_pages/homePages/report_page.dart';
-import 'package:donate_blood/admin_pages/homePages/sending_emails_page.dart';
 import 'package:donate_blood/d_r_pages/do_request_blood_dr.dart';
 import 'package:donate_blood/d_r_pages/request_page_dr.dart';
 import 'package:donate_blood/d_r_pages/search_for_history_dr.dart';
@@ -127,8 +123,7 @@ class HomePageDR extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          primary: buttonColor, // Set the button color
-          onPrimary: Colors.white,
+          foregroundColor: Colors.white, backgroundColor: buttonColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
