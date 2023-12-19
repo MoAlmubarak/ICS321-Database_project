@@ -1,13 +1,20 @@
+import 'package:donate_blood/Database/sqlite_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-class RemoveUserPage extends StatelessWidget {
-  const RemoveUserPage({Key? key});
+class RemoveUserPage extends StatefulWidget {
+  const RemoveUserPage({super.key});
+
+  @override
+  State<RemoveUserPage> createState() => _RemoveUserPageState();
+}
+
+class _RemoveUserPageState extends State<RemoveUserPage> {
+  final idController = TextEditingController();
+  final SQFLiteDatabase database = SQFLiteDatabase();
 
   @override
   Widget build(BuildContext context) {
     // Create controller for the text field
-    final usernameController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -27,11 +34,12 @@ class RemoveUserPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildTextField('Username', controller: usernameController),
+            _buildTextField('ID', controller: idController),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                if (_isFieldFilled(usernameController)) {
+                if (_isFieldFilled(idController)) {
+                  _removeUserFromDatabase();
                   _showSnackBar(context);
                   Future.delayed(const Duration(seconds: 2), () {
                     Navigator.pop(context);
@@ -101,5 +109,19 @@ class RemoveUserPage extends StatelessWidget {
   // Function to check if the field is filled
   bool _isFieldFilled(TextEditingController controller) {
     return controller.text.isNotEmpty;
+  }
+
+  void _removeUserFromDatabase() async {
+    int personID = int.parse(idController.text);
+
+    await database.deletePerson(personID);
+    final persons = await database.getAllPersons();
+
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    print('persons:');
+    for (final person in persons) {
+      print(person);
+    }
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
   }
 }

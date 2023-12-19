@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class ReportDashboardPage extends StatelessWidget {
-  const ReportDashboardPage({Key? key});
+  const ReportDashboardPage({super.key});
 
   @override
   Widget build(BuildContext context) {

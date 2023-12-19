@@ -1,8 +1,3 @@
-import 'package:donate_blood/admin_pages/dore_pages/adding_d_r_page.dart';
-import 'package:donate_blood/admin_pages/dore_pages/edit_d_r_page.dart';
-import 'package:donate_blood/admin_pages/dore_pages/id_to_update.dart';
-import 'package:donate_blood/admin_pages/dore_pages/removing_d_R_page.dart';
-import 'package:donate_blood/admin_pages/dore_pages/search_history_d_r_page.dart';
 import 'package:donate_blood/admin_pages/users_pages/add_user_page.dart';
 import 'package:donate_blood/admin_pages/users_pages/edit_user_page.dart';
 import 'package:donate_blood/admin_pages/users_pages/remove_user_page.dart';
@@ -44,7 +39,8 @@ class UserPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const AddUserPage(),
+                          builder: (context) =>
+                              const AddUserPage(title: 'AddUserPage'),
                         ),
                       );
                     },
@@ -114,9 +110,7 @@ class UserPage extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          primary:
-              const Color.fromRGBO(255, 88, 88, 1.0), // Set the button color
-          onPrimary: Colors.white,
+          foregroundColor: Colors.white, backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),

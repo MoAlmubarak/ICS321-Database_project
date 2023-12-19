@@ -1,6 +1,5 @@
 import 'package:donate_blood/admin_pages/dore_pages/adding_d_r_page.dart';
 import 'package:donate_blood/admin_pages/dore_pages/approve_update_page.dart';
-import 'package:donate_blood/admin_pages/dore_pages/edit_d_r_page.dart';
 import 'package:donate_blood/admin_pages/dore_pages/id_to_update.dart';
 import 'package:donate_blood/admin_pages/dore_pages/removing_d_R_page.dart';
 import 'package:donate_blood/admin_pages/dore_pages/search_history_d_r_page.dart';
@@ -138,9 +137,7 @@ class DRPage extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          primary:
-              const Color.fromRGBO(255, 88, 88, 1.0), // Set the button color
-          onPrimary: Colors.white,
+          foregroundColor: Colors.white, backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),

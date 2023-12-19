@@ -124,8 +124,7 @@ class HomePage extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          primary: buttonColor, // Set the button color
-          onPrimary: Colors.white,
+          foregroundColor: Colors.white, backgroundColor: buttonColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),

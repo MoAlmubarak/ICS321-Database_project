@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class RequestApprovalPage extends StatefulWidget {
-  const RequestApprovalPage({Key? key});
+  const RequestApprovalPage({
+    super.key,
+  });
 
   @override
   _RequestApprovalPageState createState() => _RequestApprovalPageState();

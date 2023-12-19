@@ -1,23 +1,38 @@
-import 'package:donate_blood/Database/sql.dart';
+import 'package:donate_blood/Database/sqlite_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AddUserPage extends StatelessWidget {
-  const AddUserPage({Key? key});
+class AddUserPage extends StatefulWidget {
+  const AddUserPage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<AddUserPage> createState() => _AddUserPageState();
+}
+
+class _AddUserPageState extends State<AddUserPage> {
+  // Create controllers for each text field
+  final typeController = TextEditingController();
+
+  final firstNameController = TextEditingController();
+
+  final lastNameController = TextEditingController();
+
+  final addressController = TextEditingController();
+
+  final contactNumberController = TextEditingController();
+
+  final emailController = TextEditingController();
+
+  final usernameController = TextEditingController();
+
+  final passwordController = TextEditingController();
+
+  final SQFLiteDatabase database = SQFLiteDatabase();
 
   @override
   Widget build(BuildContext context) {
-    // Create controllers for each text field
-    final idController = TextEditingController();
-    final typeController = TextEditingController();
-    final firstNameController = TextEditingController();
-    final lastNameController = TextEditingController();
-    final addressController = TextEditingController();
-    final contactNumberController = TextEditingController();
-    final emailController = TextEditingController();
-    final usernameController = TextEditingController();
-    final passwordController = TextEditingController();
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
@@ -40,12 +55,6 @@ class AddUserPage extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Expanded(
-                    child: _buildTextField(
-                        'ID', [FilteringTextInputFormatter.digitsOnly],
-                        controller: idController),
-                  ),
-                  const SizedBox(width: 10),
                   Expanded(
                     child: _buildTextField(
                         'Type',
@@ -94,7 +103,6 @@ class AddUserPage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   if (_areAllFieldsFilled([
-                    idController,
                     typeController,
                     firstNameController,
                     lastNameController,
@@ -105,7 +113,7 @@ class AddUserPage extends StatelessWidget {
                     passwordController
                   ])) {
                     // for adding a user.
-                    _addUser;
+                    _addUserToDatabase();
 
                     _showSnackBar(context);
 
@@ -129,6 +137,26 @@ class AddUserPage extends StatelessWidget {
                 ),
                 child: const Text(
                   'Add',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  _showUsers();
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: const StadiumBorder(),
+                  elevation: 20,
+                  backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
+                  minimumSize: const Size.fromHeight(60),
+                ),
+                child: const Text(
+                  'Show users',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -182,11 +210,37 @@ class AddUserPage extends StatelessWidget {
     return controllers.every((controller) => controller.text.isNotEmpty);
   }
 
-  void _addUser() {
-    final HospitalDatabase database = HospitalDatabase.instance;
+  void _addUserToDatabase() async {
+    Map<String, dynamic> person = {
+      "Type": typeController.text,
+      "FirstName": firstNameController.text,
+      "LastName": lastNameController.text,
+      "Address": addressController.text,
+      "ContactNumber": contactNumberController.text,
+      "Email": emailController.text,
+      "Username": usernameController.text,
+      "Password": passwordController.text
+    };
 
-    // Map person = {}
+    await database.insertPerson(person);
+    final persons = await database.getAllPersons();
 
-    // database.insertPerson(person);
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    print('persons:');
+    for (final person in persons) {
+      print(person);
+    }
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  }
+
+  void _showUsers() async {
+    final persons = await database.getAllPersons();
+
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    print('persons:');
+    for (final person in persons) {
+      print(person);
+    }
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
   }
 }

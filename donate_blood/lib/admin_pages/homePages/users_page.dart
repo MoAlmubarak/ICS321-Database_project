@@ -1,4 +1,3 @@
-import 'package:donate_blood/admin_pages/dore_pages/search_history_d_r_page2.dart';
 import 'package:donate_blood/admin_pages/homePages/home_screen.dart';
 import 'package:donate_blood/admin_pages/users_pages/add_user_page.dart';
 import 'package:flutter/material.dart';
@@ -50,8 +49,9 @@ class UsersPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              const AddUserPage(), // Replace with the actual RemoveUserPage
+                          builder: (context) => const AddUserPage(
+                            title: 'AddUserPage',
+                          ), // Replace with the actual RemoveUserPage
                         ),
                       );
                     },
@@ -64,8 +64,9 @@ class UsersPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              const AddUserPage(), // Replace with the actual EditUserPage
+                          builder: (context) => const AddUserPage(
+                            title: 'AddUserPage',
+                          ), // Replace with the actual EditUserPage
                         ),
                       );
                     },
@@ -112,8 +113,7 @@ class UsersPage extends StatelessWidget {
           debugPrint('Button Pressed: $label');
         },
         style: ElevatedButton.styleFrom(
-          primary: buttonColor, // Set the button color
-          onPrimary: Colors.white,
+          foregroundColor: Colors.white, backgroundColor: buttonColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),

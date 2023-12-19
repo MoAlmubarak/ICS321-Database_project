@@ -1,9 +1,8 @@
 import 'package:donate_blood/admin_pages/homePages/approve_blood_request2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class BloodRequestsPage extends StatelessWidget {
-  const BloodRequestsPage({Key? key});
+  const BloodRequestsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +78,8 @@ class BloodRequestsPage extends StatelessWidget {
               color: Color.fromRGBO(255, 88, 88, 1.0),
             ),
           ),
-          subtitle: Text('Request details'), // Replace with actual details
+          subtitle:
+              const Text('Request details'), // Replace with actual details
           onTap: () {
             // Implement logic to select this request
             // This could be setting state, updating a variable, etc.

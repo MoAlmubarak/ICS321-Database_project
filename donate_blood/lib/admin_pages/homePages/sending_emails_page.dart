@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class SendMessagePage extends StatelessWidget {
-  const SendMessagePage({Key? key});
+  const SendMessagePage({super.key});
 
   @override
   Widget build(BuildContext context) {

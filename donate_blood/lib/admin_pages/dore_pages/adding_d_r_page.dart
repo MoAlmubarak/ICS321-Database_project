@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AddDRPage extends StatelessWidget {
-  const AddDRPage({Key? key});
+  const AddDRPage({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
