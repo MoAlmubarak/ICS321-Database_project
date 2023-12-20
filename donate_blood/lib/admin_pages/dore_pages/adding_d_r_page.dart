@@ -6,6 +6,7 @@ class AddDRPage extends StatefulWidget {
   const AddDRPage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AddDRPageState createState() => _AddDRPageState();
 }
 
@@ -224,6 +225,7 @@ class _AddDRPageState extends State<AddDRPage> {
                           final donors = await database.getDonors();
 
                           int selectedPersonId = int.parse(idController.text);
+                          // ignore: avoid_print
                           print("selectedPersonId: $selectedPersonId");
                           bool donorFound = false;
                           bool personFound = false;

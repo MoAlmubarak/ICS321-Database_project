@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class RemoveDRPage extends StatefulWidget {
-  RemoveDRPage({super.key});
+  const RemoveDRPage({super.key});
 
   @override
   State<RemoveDRPage> createState() => _RemoveDRPageState();

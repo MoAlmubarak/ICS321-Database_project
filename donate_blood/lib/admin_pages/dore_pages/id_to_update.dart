@@ -1,16 +1,48 @@
+import 'package:donate_blood/Database/sqlite_database.dart';
 import 'package:donate_blood/admin_pages/dore_pages/edit_d_r_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class IdRemovePage extends StatelessWidget {
+class IdRemovePage extends StatefulWidget {
   const IdRemovePage({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
-    final idController = TextEditingController();
+  State<IdRemovePage> createState() => _IdRemovePageState();
+}
 
+final idController = TextEditingController();
+final typeController = TextEditingController();
+
+final firstNameController = TextEditingController();
+
+final lastNameController = TextEditingController();
+
+final weightController = TextEditingController();
+
+final birthDateController = TextEditingController();
+
+final addressController = TextEditingController();
+
+final contactNumberController = TextEditingController();
+
+final emailController = TextEditingController();
+
+final medicalHistoryController = TextEditingController();
+
+final usernameController = TextEditingController();
+
+final passwordController = TextEditingController();
+
+final SQFLiteDatabase database = SQFLiteDatabase();
+
+bool idTextFieldIsInteractive = true;
+bool isVisible = false;
+
+class _IdRemovePageState extends State<IdRemovePage> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
@@ -24,48 +56,306 @@ class IdRemovePage extends StatelessWidget {
         ),
       ),
       backgroundColor: const Color.fromRGBO(255, 229, 229, 1.0),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildTextField('ID', [FilteringTextInputFormatter.digitsOnly],
-                controller: idController),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                if (idController.text.isNotEmpty) {
-                  // Navigate to the AddDRPage
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const EditDRPage(),
+      body: SingleChildScrollView(
+        reverse: true,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildTextField('ID', [FilteringTextInputFormatter.digitsOnly],
+                  controller: idController,
+                  isInteractive: idTextFieldIsInteractive),
+              Visibility(
+                visible: isVisible,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildTextField(
+                              'Type',
+                              [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[a-zA-Z]'))
+                              ],
+                              controller: typeController,
+                              isInteractive: true),
+                        ),
+                      ],
                     ),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please fill the ID field'),
-                      duration: Duration(seconds: 2),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildTextField(
+                              'First Name',
+                              [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[a-zA-Z]'))
+                              ],
+                              controller: firstNameController,
+                              isInteractive: true),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _buildTextField(
+                              'Last Name',
+                              [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[a-zA-Z]'))
+                              ],
+                              controller: lastNameController,
+                              isInteractive: true),
+                        ),
+                      ],
                     ),
-                  );
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                shape: const StadiumBorder(),
-                elevation: 20,
-                backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
-                minimumSize: const Size.fromHeight(60),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildTextField(
+                              'Weight',
+                              [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(
+                                    10) // Limit to 10 digits
+                              ],
+                              controller: weightController,
+                              isInteractive: true),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _buildTextField('Birth Date', [],
+                              controller: birthDateController,
+                              isInteractive: true),
+                        ),
+                      ],
+                    ),
+                    _buildTextField(
+                        'Address',
+                        [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'[a-zA-Z0-9]'))
+                        ],
+                        controller: addressController,
+                        isInteractive: true),
+                    _buildTextField(
+                        'Contact Number',
+                        [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(
+                              10) // Limit to 10 digits
+                        ],
+                        controller: contactNumberController,
+                        isInteractive: true),
+                    _buildTextField('Email', [],
+                        controller: emailController, isInteractive: true),
+                    _buildTextField('Medical History', [],
+                        controller: medicalHistoryController,
+                        isInteractive: true),
+                    _buildTextField('Username', [],
+                        controller: usernameController, isInteractive: true),
+                    _buildTextField('Password', [],
+                        controller: passwordController, isInteractive: true),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_areAllFieldsFilled([
+                          idController,
+                          typeController,
+                          firstNameController,
+                          lastNameController,
+                          weightController,
+                          birthDateController,
+                          addressController,
+                          contactNumberController,
+                          emailController,
+                          medicalHistoryController,
+                          usernameController,
+                          passwordController
+                        ])) {
+                          setState(() {
+                            isVisible = !isVisible;
+                            idTextFieldIsInteractive =
+                                !idTextFieldIsInteractive;
+                          });
+
+                          _updateDonorRecipient();
+                          _showUsers();
+                          idController.clear();
+                          _showSnackBar(context);
+                          Future.delayed(const Duration(seconds: 1), () {
+                            Navigator.pop(context);
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please fill all the fields'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: const StadiumBorder(),
+                        elevation: 20,
+                        backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
+                        minimumSize: const Size.fromHeight(60),
+                      ),
+                      child: const Text(
+                        'save changes',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              child: const Text(
-                'Next',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+              Visibility(
+                visible: !isVisible,
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (_areAllFieldsFilled([idController])) {
+                          final persons = await database.getAllPersons();
+                          final donors = await database.getDonors();
+                          final medicalHistorys =
+                              await database.getMedicalHistories();
+
+                          int selectedPersonId = int.parse(idController.text);
+                          // ignore: avoid_print
+                          print("selectedPersonId: $selectedPersonId");
+                          bool donorFound = false;
+                          bool personFound = false;
+
+                          for (final person in persons) {
+                            if (selectedPersonId == person["Id"]) {
+                              personFound = true;
+
+                              typeController.text = person["Type"];
+                              firstNameController.text = person["FirstName"];
+                              lastNameController.text = person["LastName"];
+                              addressController.text = person["Address"];
+                              contactNumberController.text =
+                                  person["ContactNumber"];
+                              emailController.text = person["Email"];
+                              usernameController.text = person["Username"];
+                              passwordController.text = person["Password"];
+
+                              for (final donor in donors) {
+                                if (selectedPersonId == donor["DonorId"]) {
+                                  donorFound = true;
+
+                                  birthDateController.text = donor["BirthDate"];
+                                  weightController.text =
+                                      donor["Weight"].toString();
+
+                                  for (final medicalHistory
+                                      in medicalHistorys) {
+                                    if (selectedPersonId ==
+                                        medicalHistory["HistoryId"]) {
+                                      medicalHistoryController.text =
+                                          medicalHistory["MedicalHistory"];
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                          if (donorFound) {
+                            setState(() {
+                              isVisible = !isVisible;
+                              idTextFieldIsInteractive =
+                                  !idTextFieldIsInteractive;
+                            });
+                          } else if (!personFound) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'no person with this ID. please enter another ID.'),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'person with this ID do not have donor/recipient recored. please enter another ID.'),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please fill all the fields'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: const StadiumBorder(),
+                        elevation: 20,
+                        backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
+                        minimumSize: const Size.fromHeight(60),
+                      ),
+                      child: const Text(
+                        'Insert ID',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        _showUsers();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: const StadiumBorder(),
+                        elevation: 20,
+                        backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
+                        minimumSize: const Size.fromHeight(60),
+                      ),
+                      child: const Text(
+                        'Show users',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Function to show a SnackBar
+  void _showSnackBar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('User added successfully!'),
+        duration: const Duration(seconds: 2),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            // take me to the HomeScreen page
+            Navigator.pop(context);
+          },
         ),
       ),
     );
@@ -73,10 +363,12 @@ class IdRemovePage extends StatelessWidget {
 
   Widget _buildTextField(
       String labelText, List<TextInputFormatter>? inputFormatters,
-      {required TextEditingController controller}) {
+      {required TextEditingController controller,
+      required bool isInteractive}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextField(
+        enabled: isInteractive,
         inputFormatters: inputFormatters,
         decoration: InputDecoration(
           labelText: labelText,
@@ -85,5 +377,68 @@ class IdRemovePage extends StatelessWidget {
         controller: controller,
       ),
     );
+  }
+
+  void _updateDonorRecipient() async {
+    Map<String, dynamic> personInfo = {
+      "Type": typeController.text,
+      "FirstName": firstNameController.text,
+      "LastName": lastNameController.text,
+      "Address": addressController.text,
+      "ContactNumber": contactNumberController.text,
+      "Email": emailController.text,
+      "Username": usernameController.text,
+      "Password": passwordController.text
+    };
+
+    Map<String, dynamic> medicalHistory = {
+      "HistoryId": int.parse(idController.text),
+      "MedicalHistory": medicalHistoryController.text,
+    };
+
+    Map<String, dynamic> donorInfo = {
+      "BirthDate": birthDateController.text,
+      "Weight": int.parse(weightController.text),
+      "DonorId": idController.text,
+      "HistoryId": int.parse(idController.text),
+    };
+
+    await database.updatePerson(personInfo);
+    await database.updateDonor(donorInfo);
+    await database.updateMedicalHistory(medicalHistory);
+  }
+
+  // Function to check if all fields are filled
+  bool _areAllFieldsFilled(List<TextEditingController> controllers) {
+    return controllers.every((controller) => controller.text.isNotEmpty);
+  }
+
+  void _showUsers() async {
+    final persons = await database.getAllPersons();
+
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    print('persons:');
+    for (final person in persons) {
+      print(person);
+    }
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+    final donors = await database.getDonors();
+
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    print('donors:');
+    for (final donor in donors) {
+      print(donor);
+    }
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+    final medicalHistorys = await database.getMedicalHistories();
+
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    print('medicalHistorys:');
+    for (final medicalHistory in medicalHistorys) {
+      print(medicalHistory);
+    }
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
   }
 }

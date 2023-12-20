@@ -15,6 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   late Size mediaSize;
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  SQFLiteDatabase database = SQFLiteDatabase();
 
   @override
   Widget build(BuildContext context) {
@@ -154,27 +155,45 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildLoginButton() {
     return ElevatedButton(
       onPressed: () async {
-// and so on  no futher example needed .................................
+        String username = usernameController.text.toLowerCase();
+        String passwrod = passwordController.text;
 
-        // String username = usernameController.text.toLowerCase();
+        final persons = await database.getAllPersons();
+        String userType = "";
+        String userPassword = "";
+        bool usernameFound = false;
 
-        // if (username.contains('admin')) {
-        //   // Navigate to HomeScreen for admin
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(builder: (context) => const HomeScreen()),
-        //   );
-        // } else if (username.contains('donor') ||
-        //     username.contains('recipient')) {
-        //   // Navigate to HomeScreenDR for donor/recipient
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(builder: (context) => const HomeScreenDR()),
-        //
-        // } else {
-        //   // Handle other cases or display a message
-        //   _showSnackBar(context, 'Invalid username');
-        // }
+        for (final person in persons) {
+          if (username == person["Username"]) {
+            usernameFound = true;
+            userType = person["Type"];
+            userPassword = person["Password"];
+          }
+        }
+
+        print("password: $passwrod\n userPassword: $userPassword");
+
+        if (username.contains('admin') ||
+            (usernameFound &&
+                userType == "admin" &&
+                passwrod == userPassword)) {
+          // Navigate to HomeScreen for admin
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        } else if ((username.contains('donor') ||
+            username.contains('recipient') ||
+            ((usernameFound && passwrod == userPassword)))) {
+          // Navigate to HomeScreenDR for donor/recipient
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreenDR()),
+          );
+        } else {
+          // Handle other cases or display a message
+          _showSnackBar(context, 'Invalid username or password');
+        }
       },
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),
