@@ -41,7 +41,7 @@ class DRPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const AddDRPage(),
+                          builder: (context) => AddDRPage(),
                         ),
                       );
                     },
@@ -54,7 +54,7 @@ class DRPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const RemoveDRPage(),
+                          builder: (context) => RemoveDRPage(),
                         ),
                       );
                     },
@@ -137,7 +137,8 @@ class DRPage extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.white, backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
+          foregroundColor: Colors.white,
+          backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
