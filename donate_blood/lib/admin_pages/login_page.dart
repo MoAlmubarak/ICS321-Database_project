@@ -1,5 +1,6 @@
 import 'package:donate_blood/Database/sqlite_database.dart';
 import 'package:donate_blood/d_r_pages/home_screen_dr.dart';
+import 'package:donate_blood/guest_pages/home_screen_gs.dart';
 import 'package:flutter/material.dart';
 import 'package:donate_blood/admin_pages/homePages/home_screen.dart'; // Import the HomeScreen class or update the import statement accordingly
 
@@ -224,7 +225,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildLogAsGuestButton() {
     return ElevatedButton(
       onPressed: () {
-        debugPrint('You are logged in as a guest');
+        // Navigate to HomeScreen for admin
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreenGS()),
+        );
       },
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),
