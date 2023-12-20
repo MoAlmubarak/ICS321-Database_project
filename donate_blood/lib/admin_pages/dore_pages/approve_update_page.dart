@@ -6,6 +6,7 @@ class RequestApprovalPage extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _RequestApprovalPageState createState() => _RequestApprovalPageState();
 }
 

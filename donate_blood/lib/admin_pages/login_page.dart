@@ -1,3 +1,4 @@
+import 'package:donate_blood/Database/sqlite_database.dart';
 import 'package:donate_blood/d_r_pages/home_screen_dr.dart';
 import 'package:flutter/material.dart';
 import 'package:donate_blood/admin_pages/homePages/home_screen.dart'; // Import the HomeScreen class or update the import statement accordingly
@@ -14,6 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   late Size mediaSize;
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  SQFLiteDatabase database = SQFLiteDatabase();
 
   @override
   Widget build(BuildContext context) {
@@ -152,17 +154,37 @@ class _LoginPageState extends State<LoginPage> {
   // }
   Widget _buildLoginButton() {
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
         String username = usernameController.text.toLowerCase();
+        String passwrod = passwordController.text;
 
-        if (username.contains('admin')) {
+        final persons = await database.getAllPersons();
+        String userType = "";
+        String userPassword = "";
+        bool usernameFound = false;
+
+        for (final person in persons) {
+          if (username == person["Username"]) {
+            usernameFound = true;
+            userType = person["Type"];
+            userPassword = person["Password"];
+          }
+        }
+
+        print("password: $passwrod\n userPassword: $userPassword");
+
+        if (username.contains('admin') ||
+            (usernameFound &&
+                userType == "admin" &&
+                passwrod == userPassword)) {
           // Navigate to HomeScreen for admin
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const HomeScreen()),
           );
-        } else if (username.contains('donor') ||
-            username.contains('recipient')) {
+        } else if ((username.contains('donor') ||
+            username.contains('recipient') ||
+            ((usernameFound && passwrod == userPassword)))) {
           // Navigate to HomeScreenDR for donor/recipient
           Navigator.push(
             context,
@@ -170,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
           );
         } else {
           // Handle other cases or display a message
-          _showSnackBar(context, 'Invalid username');
+          _showSnackBar(context, 'Invalid username or password');
         }
       },
       style: ElevatedButton.styleFrom(
