@@ -1,3 +1,4 @@
+import 'package:donate_blood/Database/sqlite_database.dart';
 import 'package:donate_blood/d_r_pages/home_screen_dr.dart';
 import 'package:flutter/material.dart';
 import 'package:donate_blood/admin_pages/homePages/home_screen.dart'; // Import the HomeScreen class or update the import statement accordingly
@@ -46,15 +47,10 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           Icon(Icons.bloodtype_outlined, size: 100, color: Colors.white),
           Text('Donate Blood',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2.0)),
+              style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold, letterSpacing: 2.0)),
           Text(
             'وَمَنْ أَحْيَاهَا فَكَأَنَّمَا أَحْيَا النَّاسَ جَمِيعاً',
-            style: TextStyle(
-                color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -87,10 +83,7 @@ class _LoginPageState extends State<LoginPage> {
         const Text(
           'Welcome',
           style: TextStyle(
-              color: Color.fromRGBO(255, 88, 88, 1.0),
-              fontSize: 30,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 2.0),
+              color: Color.fromRGBO(255, 88, 88, 1.0), fontSize: 30, fontWeight: FontWeight.w500, letterSpacing: 2.0),
         ),
         _buildRedText(
           'Please, login with your information',
@@ -112,19 +105,15 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildRedText(String text) {
     return Text(
       text,
-      style: const TextStyle(
-          fontSize: 15, color: Color.fromRGBO(255, 88, 88, 1.0)),
+      style: const TextStyle(fontSize: 15, color: Color.fromRGBO(255, 88, 88, 1.0)),
     );
   }
 
-  Widget _buildInputField(TextEditingController controller,
-      {isPassword = false}) {
+  Widget _buildInputField(TextEditingController controller, {isPassword = false}) {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
-        suffixIcon: isPassword
-            ? const Icon(Icons.remove_red_eye_outlined)
-            : const Icon(Icons.done),
+        suffixIcon: isPassword ? const Icon(Icons.remove_red_eye_outlined) : const Icon(Icons.done),
       ),
       obscureText: isPassword,
     );
@@ -152,26 +141,117 @@ class _LoginPageState extends State<LoginPage> {
   // }
   Widget _buildLoginButton() {
     return ElevatedButton(
-      onPressed: () {
-        String username = usernameController.text.toLowerCase();
+      onPressed: () async {
+        final SQFLiteDatabase database = SQFLiteDatabase();
 
-        if (username.contains('admin')) {
-          // Navigate to HomeScreen for admin
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
-        } else if (username.contains('donor') ||
-            username.contains('recipient')) {
-          // Navigate to HomeScreenDR for donor/recipient
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreenDR()),
-          );
-        } else {
-          // Handle other cases or display a message
-          _showSnackBar(context, 'Invalid username');
-        }
+        final person = {
+          'Type': 'Donor',
+          'FirstName': 'John',
+          'LastName': 'Doe',
+          'Address': '123 Main St',
+          'ContactNumber': '555-1234',
+          'Email': 'johndoe@example.com',
+          'Username': 'johndoe',
+          'Password': 'password123',
+        };
+
+        await database.insertPerson(person);
+        final medicalHistory = {
+          'HistoryId': 2,
+          'MedicalHistory': 'No significant medical history',
+        };
+
+        await database.insertMedicalHistory(medicalHistory);
+        final bloodType = {
+          'BloodId': 1,
+          'Type': 'A+',
+        };
+
+        await database.insertBloodType(bloodType);
+        final compatibleType = {
+          'compatibleType': 'A+',
+          'BloodId': 1,
+        };
+
+        await database.insertCompatibleType(compatibleType);
+        final donor = {
+          'BirthDate': '1990-01-01',
+          'Weight': 70,
+          'DonorId': 1,
+          'HistoryId': 1,
+        };
+
+        await database.insertDonor(donor);
+        final donation = {
+          'DonationId': 1,
+          'DonationDate': '2023-12-19',
+          'ExpirationDate': '2024-01-19',
+          'DonateAmount': 1,
+          'Status': 'Received',
+          'AdminId': 1,
+          'DonorId': 1,
+        };
+
+        await database.insertDonation(donation);
+        final received = {
+          'ReceivedAmount': 1,
+          'DonationId': 1,
+          'ReceivedId': 1,
+        };
+
+        await database.insertReceived(received);
+
+        final recipient = {
+          'RecipientId': 1,
+          'HistoryId': 1,
+          'ReceivedAmount': 1,
+        };
+
+        await database.insertRecipient(recipient);
+        final requestBlood = {
+          'RequestId': 1,
+          'RecipientId': 1,
+          'BloodId': 1,
+          'BloodAmount': 1,
+          'IsApproved': 1,
+        };
+
+        await database.insertRequestBlood(requestBlood);
+        final collectionDrive = {
+          'DriveId': 1,
+          'CollectedAmount': 1,
+          'TargetAmount': 10,
+          'StartDate': '2023-12-01',
+          'EndDate': '2023-12-31',
+          'CampaignType': 'Blood Drive',
+        };
+
+        await database.insertBloodCollectionDrive(collectionDrive);
+        print('presons');
+        print(await database.getAllPersons());
+        print(await database.getBloodTypes());
+        print(await database.getDonations());
+// and so on  no futher example needed .................................
+
+        // String username = usernameController.text.toLowerCase();
+
+        // if (username.contains('admin')) {
+        //   // Navigate to HomeScreen for admin
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(builder: (context) => const HomeScreen()),
+        //   );
+        // } else if (username.contains('donor') ||
+        //     username.contains('recipient')) {
+        //   // Navigate to HomeScreenDR for donor/recipient
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(builder: (context) => const HomeScreenDR()),
+        //   );
+        // } else {
+        //   // Handle other cases or display a message
+        //   _showSnackBar(context, 'Invalid username');
+        // }
       },
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),
@@ -210,9 +290,7 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: const Color.fromRGBO(255, 88, 88, 1.0),
         minimumSize: const Size.fromHeight(60),
       ),
-      child: const Text('AS GUEST',
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
+      child: const Text('AS GUEST', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
     );
   }
 }

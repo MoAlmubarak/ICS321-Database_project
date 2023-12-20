@@ -17,8 +17,7 @@ class SQFLiteDatabase {
     String databasePath = await getDatabasesPath();
     String fullPath = join(databasePath, "bloodDonationDatabase.db");
 
-    Database database =
-        await openDatabase(fullPath, onCreate: _databaseCreation, version: 1);
+    Database database = await openDatabase(fullPath, onCreate: _databaseCreation, version: 2);
 
     return database;
   }
@@ -76,6 +75,7 @@ class SQFLiteDatabase {
         DonationId INTEGER PRIMARY KEY,
         DonationDate TEXT NOT NULL,
         ExpirationDate TEXT NOT NULL,
+        DonateAmount INTEGER NOT NULL,
         Status TEXT NOT NULL,
         AdminId INTEGER NOT NULL,
         DonorId INTEGER NOT NULL,
@@ -93,14 +93,57 @@ class SQFLiteDatabase {
         FOREIGN KEY (ReceivedId) REFERENCES Person(Id)
       )
     ''');
+    await db.execute('''
+    CREATE TABLE Recipient (
+      RecipientId INTEGER NOT NULL,
+      HistoryId INTEGER NOT NULL,
+      ReceivedAmount INTEGER NOT NULL,
+      FOREIGN KEY (RecipientId) REFERENCES Person(Id),
+      FOREIGN KEY (HistoryId) REFERENCES MedicalHistory(HistoryId)
+    )
+  ''');
 
     await db.execute('''
-      CREATE TABLE Donate (
-        DonateAmount INTEGER NOT NULL,
-        DonorId INTEGER NOT NULL,
-        DonationId INTEGER NOT NULL,
-        FOREIGN KEY (DonorId) REFERENCES Person(Id),
-        FOREIGN KEY (DonationId) REFERENCES Donation(DonationId)
+
+    CREATE TABLE RequestBlood (
+      RequestId INTEGER PRIMARY KEY,
+      RecipientId INTEGER NOT NULL,
+      BloodId INTEGER NOT NULL,
+      BloodAmount INTEGER NOT NULL,
+      IsApproved INTEGER NOT NULL,
+      FOREIGN KEY (RecipientId) REFERENCES Person(Id),
+      FOREIGN KEY (BloodId) REFERENCES BloodType(BloodId)
+    )
+
+  ''');
+
+    await db.execute('''
+    CREATE TABLE BloodCollectionDrive (
+      DriveId INTEGER PRIMARY KEY,
+      CollectedAmount INTEGER NOT NULL,
+      TargetAmount INTEGER NOT NULL,
+      StartDate TEXT NOT NULL,
+      EndDate TEXT NOT NULL,
+      CampaignType TEXT NOT NULL
+    )
+
+  ''');
+
+    await db.execute('''
+      CREATE TABLE UpdateInfoRequest (
+        PersonId INTEGER NOT NULL ,
+        Type TEXT NOT NULL,
+        FirstName TEXT NOT NULL,
+        LastName TEXT NOT NULL,
+        Address TEXT NOT NULL,
+        ContactNumber TEXT NOT NULL,
+        Email TEXT NOT NULL,
+        Username TEXT NOT NULL,
+        Password TEXT NOT NULL,
+        BirthDate TEXT NOT NULL,
+        Weight INTEGER NOT NULL,
+        Status TEXT NOT NULL,
+        MedicalHistory TEXT NOT NULL
       )
     ''');
   }
@@ -142,9 +185,24 @@ class SQFLiteDatabase {
     return await db!.insert('Received', received);
   }
 
-  Future<int> insertDonate(Map<String, dynamic> donate) async {
-    final Database? db = await database;
-    return await db!.insert('Donate', donate);
+  Future<void> insertRecipient(Map<String, dynamic> recipient) async {
+    final db = await database;
+    await db!.insert('Recipient', recipient);
+  }
+
+  Future<void> insertRequestBlood(Map<String, dynamic> requestBlood) async {
+    final db = await database;
+    await db!.insert('RequestBlood', requestBlood);
+  }
+
+  Future<void> insertBloodCollectionDrive(Map<String, dynamic> collectionDrive) async {
+    final db = await database;
+    await db!.insert('BloodCollectionDrive', collectionDrive);
+  }
+
+  Future<void> insertUpdateInfoRequest(Map<String, dynamic> updateInfo) async {
+    final db = await database;
+    await db!.insert('UpdateInfoRequest', updateInfo);
   }
 
   // Delete operations
@@ -156,40 +214,53 @@ class SQFLiteDatabase {
 
   Future<int> deleteBloodType(int bloodId) async {
     final Database? db = await database;
-    return await db!
-        .delete('BloodType', where: 'BloodId = ?', whereArgs: [bloodId]);
+    return await db!.delete('BloodType', where: 'BloodId = ?', whereArgs: [bloodId]);
   }
 
   Future<int> deleteCompatibleType(int bloodId) async {
     final Database? db = await database;
-    return await db!
-        .delete('compatibleType', where: 'BloodId = ?', whereArgs: [bloodId]);
+    return await db!.delete('compatibleType', where: 'BloodId = ?', whereArgs: [bloodId]);
   }
 
   Future<int> deleteMedicalHistory(int historyId) async {
     final Database? db = await database;
-    return await db!.delete('MedicalHistory',
-        where: 'HistoryId = ?', whereArgs: [historyId]);
+    return await db!.delete('MedicalHistory', where: 'HistoryId = ?', whereArgs: [historyId]);
   }
 
   Future<int> deleteDonor(int donorId) async {
     final Database? db = await database;
-    return await db!
-        .delete('Donor', where: 'DonorId = ?', whereArgs: [donorId]);
+    return await db!.delete('Donor', where: 'DonorId = ?', whereArgs: [donorId]);
   }
 
   Future<int> deleteDonation(int donationId) async {
     final Database? db = await database;
-    return await db!
-        .delete('Donation', where: 'DonationId = ?', whereArgs: [donationId]);
+    return await db!.delete('Donation', where: 'DonationId = ?', whereArgs: [donationId]);
   }
 
   Future<int> deleteReceived(int receivedId) async {
     final Database? db = await database;
-    return await db!
-        .delete('Received', where: 'ReceivedId = ?', whereArgs: [receivedId]);
+    return await db!.delete('Received', where: 'ReceivedId = ?', whereArgs: [receivedId]);
   }
 
+  Future<void> deleteRecipient(int recipientId) async {
+    final db = await database;
+    await db!.delete('Recipient', where: 'RecipientId = ?', whereArgs: [recipientId]);
+  }
+
+  Future<void> deleteRequestBlood(int requestId) async {
+    final db = await database;
+    await db!.delete('RequestBlood', where: 'RequestId = ?', whereArgs: [requestId]);
+  }
+
+  Future<void> deleteBloodCollectionDrive(int driveId) async {
+    final db = await database;
+    await db!.delete('BloodCollectionDrive', where: 'DriveId = ?', whereArgs: [driveId]);
+  }
+
+  Future<void> deleteUpdateInfoRequest(int personId) async {
+    final db = await database;
+    await db!.delete('UpdateInfoRequest', where: 'PersonId = ?', whereArgs: [personId]);
+  }
   // update operations
 
   Future<int> updatePerson(Map<String, dynamic> person) async {
@@ -201,43 +272,55 @@ class SQFLiteDatabase {
   Future<int> updateBloodType(Map<String, dynamic> bloodType) async {
     final Database? db = await database;
     final bloodId = bloodType['BloodId'];
-    return await db!.update('BloodType', bloodType,
-        where: 'BloodId = ?', whereArgs: [bloodId]);
+    return await db!.update('BloodType', bloodType, where: 'BloodId = ?', whereArgs: [bloodId]);
   }
 
   Future<int> updateCompatibleType(Map<String, dynamic> compatibleType) async {
     final Database? db = await database;
     final bloodId = compatibleType['BloodId'];
-    return await db!.update('compatibleType', compatibleType,
-        where: 'BloodId = ?', whereArgs: [bloodId]);
+    return await db!.update('compatibleType', compatibleType, where: 'BloodId = ?', whereArgs: [bloodId]);
   }
 
   Future<int> updateMedicalHistory(Map<String, dynamic> medicalHistory) async {
     final Database? db = await database;
     final historyId = medicalHistory['HistoryId'];
-    return await db!.update('MedicalHistory', medicalHistory,
-        where: 'HistoryId = ?', whereArgs: [historyId]);
+    return await db!.update('MedicalHistory', medicalHistory, where: 'HistoryId = ?', whereArgs: [historyId]);
   }
 
   Future<int> updateDonor(Map<String, dynamic> donor) async {
     final Database? db = await database;
     final donorId = donor['DonorId'];
-    return await db!
-        .update('Donor', donor, where: 'DonorId = ?', whereArgs: [donorId]);
+    return await db!.update('Donor', donor, where: 'DonorId = ?', whereArgs: [donorId]);
   }
 
   Future<int> updateDonation(Map<String, dynamic> donation) async {
     final Database? db = await database;
     final donationId = donation['DonationId'];
-    return await db!.update('Donation', donation,
-        where: 'DonationId = ?', whereArgs: [donationId]);
+    return await db!.update('Donation', donation, where: 'DonationId = ?', whereArgs: [donationId]);
   }
 
   Future<int> updateReceived(Map<String, dynamic> received) async {
     final Database? db = await database;
     final receivedId = received['ReceivedId'];
-    return await db!.update('Received', received,
-        where: 'ReceivedId = ?', whereArgs: [receivedId]);
+    return await db!.update('Received', received, where: 'ReceivedId = ?', whereArgs: [receivedId]);
+  }
+
+  Future<void> updateRecipient(Map<String, dynamic> recipient) async {
+    final db = await database;
+    final recipientId = recipient['RecipientId'];
+    await db!.update('Recipient', recipient, where: 'RecipientId = ?', whereArgs: [recipientId]);
+  }
+
+  Future<void> updateRequestBlood(Map<String, dynamic> requestBlood) async {
+    final db = await database;
+    final requestId = requestBlood['RequestId'];
+    await db!.update('RequestBlood', requestBlood, where: 'RequestId = ?', whereArgs: [requestId]);
+  }
+
+  Future<void> updateBloodCollectionDrive(Map<String, dynamic> collectionDrive) async {
+    final db = await database;
+    final driveId = collectionDrive['DriveId'];
+    await db!.update('BloodCollectionDrive', collectionDrive, where: 'DriveId = ?', whereArgs: [driveId]);
   }
 
   // get operations
@@ -277,14 +360,13 @@ class SQFLiteDatabase {
     return await db!.query('Received');
   }
 
-  Future<List<Map<String, dynamic>>> getDonates() async {
+  Future<List<Map<String, dynamic>>> getBloodCollectionDrives() async {
     final Database? db = await database;
-    return await db!.query('Donate');
+    return await db!.query('BloodCollectionDrive');
   }
 
   // this method List of all blood donations received in a week or a month
-  Future<List<Map<String, dynamic>>> getBloodDonationsInPeriod(
-      DateTime startDate, DateTime endDate) async {
+  Future<List<Map<String, dynamic>>> getBloodDonationsInPeriod(DateTime startDate, DateTime endDate) async {
     final Database? db = await database;
     return await db!.query(
       'Donation',
@@ -294,23 +376,54 @@ class SQFLiteDatabase {
   }
 
   // this method List the aggregated amount available for each blood type
-  Future<List<Map<String, dynamic>>> getAggregatedBloodAmountByType() async {
-    final Database? db = await database;
-    return await db!.rawQuery('''
-    SELECT bloodType, SUM(amount) AS totalAmount
-    FROM Donation
-    GROUP BY bloodType
+  Future<Map<String, int>> getAggregatedBloodAmount() async {
+    final db = await database;
+
+    final results = await db!.rawQuery('''
+    SELECT BloodType.Type, 
+          (SUM(Donation.DonateAmount) - IFNULL(SUM(Received.ReceivedAmount), 0)) AS AggregatedAmount
+    FROM BloodType
+    LEFT JOIN Donation ON BloodType.BloodId = Donation.BloodId
+    LEFT JOIN Received ON Donation.DonationId = Received.DonationId
+    GROUP BY BloodType.Type
   ''');
+
+    final bloodAmountMap = <String, int>{};
+
+    for (final row in results) {
+      final bloodType = row['Type'] as String;
+      final aggregatedAmount = row['AggregatedAmount'] as int;
+      bloodAmountMap[bloodType] = aggregatedAmount;
+    }
+
+    return bloodAmountMap;
   }
 
   // this method List all Collection Drive and total blood collected during each drive
-  Future<List<Map<String, dynamic>>> getCollectionDriveTotals() async {
-    final Database? db = await database;
-    return await db!.rawQuery('''
-    SELECT CollectionDrive.driveName, SUM(Donation.amount) AS totalAmount
-    FROM CollectionDrive
-    LEFT JOIN Donation ON CollectionDrive.driveId = Donation.driveId
-    GROUP BY CollectionDrive.driveId
+  Future<List<Map<String, dynamic>>> getCollectionDrives() async {
+    final db = await database;
+
+    final results = await db!.rawQuery('''
+    SELECT BloodCollectionDrive.DriveId,
+           (SELECT SUM(DonateAmount) FROM Donation
+            WHERE Donation.DonationDate >= BloodCollectionDrive.StartDate
+              AND Donation.DonationDate <= BloodCollectionDrive.EndDate
+            ) AS CollectedAmount
+    FROM BloodCollectionDrive
   ''');
+
+    final collectionDrives = <Map<String, dynamic>>[];
+
+    for (final row in results) {
+      final driveId = row['DriveId'] as int;
+      final collectedAmount = row['CollectedAmount'] as int;
+      final collectionDrive = {
+        'driveId': driveId,
+        'collectedAmount': collectedAmount,
+      };
+      collectionDrives.add(collectionDrive);
+    }
+
+    return collectionDrives;
   }
 }
